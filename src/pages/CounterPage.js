@@ -1,6 +1,7 @@
+import produce from "immer";
+import { useReducer } from "react";
 import Button from "../components/Button";
 import Panel from "../components/Panel";
-import { useReducer } from "react";
 
 const INCREMENT_COUNT = 'increment';
 const DECREMENT_COUNT = 'decrement';
@@ -10,34 +11,26 @@ const SET_COUNT = 'set-count';
 const reducer = (state, action) => {
     switch (action.type){
         case INCREMENT_COUNT: 
-            return{
-                ...state,
-                count: state.count + 1,
-            };
+          state.count = state.count + 1
+          return;
         case DECREMENT_COUNT:
-            return{
-                ...state,
-                count: state.count - 1,
-            };
+          state.count = state.count - 1
+          return;
         case SET_VALUE_TO_ADD:
-        return{
-                ...state,
-                valueToAdd: action.payload,
-            }
+          state.valueToAdd = action.payload  
+          return;
         case SET_COUNT:
-        return{
-            ...state,
-            count: state.count + state.valueToAdd,
-            valueToAdd: 0
-        }
+          state.count = state.count + state.valueToAdd
+          state.valueToAdd = 0
+          return;
         default:
-        return state;
+        return;
     };   
 };
 
 function CounterPage({ initialCount }){
 
-    const [state, dispatch] = useReducer(reducer, {
+    const [state, dispatch] = useReducer(produce(reducer), {
         count: initialCount,
         valueToAdd: 0
     });
